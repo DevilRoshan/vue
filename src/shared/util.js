@@ -54,6 +54,7 @@ export function toRawType (value: any): string {
 /**
  * Strict object type check. Only returns true
  * for plain JavaScript objects.
+ * 判断是不是对象，强制校验，通过toString来判断
  */
 export function isPlainObject (obj: any): boolean {
   return _toString.call(obj) === '[object Object]'
@@ -102,6 +103,9 @@ export function toNumber (val: string): number | string {
 /**
  * Make a map and return a function for checking if a key
  * is in that map.
+ * 将字符串转化为对象
+ * 将传入的字符串，按照逗号分割为数组，将数组中的每一项作为key，属性为
+ * true，将这些键值对存储在对象中，最后判断是够将其转化为小写
  */
 export function makeMap (
   str: string,
@@ -119,6 +123,7 @@ export function makeMap (
 
 /**
  * Check if a tag is a built-in tag.
+ * 插槽和组件是内置标签
  */
 export const isBuiltInTag = makeMap('slot,component', true)
 
@@ -141,6 +146,7 @@ export function remove (arr: Array<any>, item: any): Array<any> | void {
 
 /**
  * Check whether an object has the property.
+ * 使用 hasOwnProperty 判断一个对象是否有一个属性
  */
 const hasOwnProperty = Object.prototype.hasOwnProperty
 export function hasOwn (obj: Object | Array<*>, key: string): boolean {
@@ -160,6 +166,7 @@ export function cached<F: Function> (fn: F): F {
 
 /**
  * Camelize a hyphen-delimited string.
+ * 将连字符转化为驼峰命名
  */
 const camelizeRE = /-(\w)/g
 export const camelize = cached((str: string): string => {
@@ -227,6 +234,7 @@ export function toArray (list: any, start?: number): Array<any> {
 
 /**
  * Mix properties into target object.
+ * 将属性合并到目标对象上
  */
 export function extend (to: Object, _from: ?Object): Object {
   for (const key in _from) {
@@ -254,6 +262,7 @@ export function toObject (arr: Array<any>): Object {
  * Perform no operation.
  * Stubbing args to make Flow happy without leaving useless transpiled code
  * with ...rest (https://flow.org/blog/2017/05/07/Strict-Function-Call-Arity/).
+ * 空函数，即不做任何操作
  */
 export function noop (a?: any, b?: any, c?: any) {}
 

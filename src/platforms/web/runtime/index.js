@@ -7,7 +7,7 @@ import { mountComponent } from 'core/instance/lifecycle'
 import { devtools, inBrowser } from 'core/util/index'
 
 import {
-  query,
+  query, // 转化el，如果是选择器则转化为dom
   mustUseProp,
   isReservedTag,
   isReservedAttr,
@@ -20,20 +20,26 @@ import platformDirectives from './directives/index'
 import platformComponents from './components/index'
 
 // install platform specific utils
+// 注册一系列方法，工具方法
 Vue.config.mustUseProp = mustUseProp
-Vue.config.isReservedTag = isReservedTag
-Vue.config.isReservedAttr = isReservedAttr
-Vue.config.getTagNamespace = getTagNamespace
-Vue.config.isUnknownElement = isUnknownElement
+Vue.config.isReservedTag = isReservedTag // 判断是否是保留的标签
+Vue.config.isReservedAttr = isReservedAttr // 判断是否是保留的属性
+Vue.config.getTagNamespace = getTagNamespace // 获取命名空间
+Vue.config.isUnknownElement = isUnknownElement // 判断是否是不认识的元素
 
 // install platform runtime directives & components
-extend(Vue.options.directives, platformDirectives)
-extend(Vue.options.components, platformComponents)
+// 注册组件和指令
+// extend 合并对西那个
+extend(Vue.options.directives, platformDirectives) // 指令
+extend(Vue.options.components, platformComponents) // 组件
 
 // install platform patch function
+// 原型上添加将虚拟dom转化为真实dom的函数
+// 如果是浏览器则添加转化dom的方法，否则，就添加一个空方法
 Vue.prototype.__patch__ = inBrowser ? patch : noop
 
 // public mount method
+// 给原型上添加 $mount 方法，用于挂载dom
 Vue.prototype.$mount = function (
   el?: string | Element,
   hydrating?: boolean
@@ -43,6 +49,7 @@ Vue.prototype.$mount = function (
 }
 
 // devtools global hook
+// 调试相关的代码
 /* istanbul ignore next */
 if (inBrowser) {
   setTimeout(() => {

@@ -8,6 +8,7 @@ export const namespaceMap = {
   math: 'http://www.w3.org/1998/Math/MathML'
 }
 
+// 判断是否是html中的标签
 export const isHTMLTag = makeMap(
   'html,body,base,head,link,meta,style,title,' +
   'address,article,aside,footer,header,h1,h2,h3,h4,h5,h6,hgroup,nav,section,' +
@@ -24,6 +25,7 @@ export const isHTMLTag = makeMap(
 
 // this map is intentionally selective, only covering SVG elements that may
 // contain child elements.
+// svg的标签包括子元素，将这个字符串转化为字典，用于查询是否是svg
 export const isSVG = makeMap(
   'svg,animate,circle,clippath,cursor,defs,desc,ellipse,filter,font-face,' +
   'foreignObject,g,glyph,image,line,marker,mask,missing-glyph,path,pattern,' +
@@ -33,22 +35,28 @@ export const isSVG = makeMap(
 
 export const isPreTag = (tag: ?string): boolean => tag === 'pre'
 
+// 判断是否是保留的标签，即判断是否是html中的标签或者svg中的标签
 export const isReservedTag = (tag: string): ?boolean => {
   return isHTMLTag(tag) || isSVG(tag)
 }
 
+// svg有命名空间，判断是够是svg，如果是svg则返回它的命名空间'svg'
 export function getTagNamespace (tag: string): ?string {
   if (isSVG(tag)) {
     return 'svg'
   }
   // basic support for MathML
   // note it doesn't support other MathML elements being component roots
+  // 对MathML的基本支持
+  // 注意，它不支持其他MathML元素作为组件根元素
   if (tag === 'math') {
     return 'math'
   }
 }
 
+// 缓存不认识的元素
 const unknownElementCache = Object.create(null)
+// 判断是否是不认识的标签
 export function isUnknownElement (tag: string): boolean {
   /* istanbul ignore if */
   if (!inBrowser) {
@@ -63,6 +71,7 @@ export function isUnknownElement (tag: string): boolean {
     return unknownElementCache[tag]
   }
   const el = document.createElement(tag)
+  // 查找标签是否包含'-'，用于判断自己注册的标签
   if (tag.indexOf('-') > -1) {
     // http://stackoverflow.com/a/28210364/1070244
     return (unknownElementCache[tag] = (

@@ -3,24 +3,26 @@ import { initGlobalAPI } from './global-api/index'
 import { isServerRendering } from 'core/util/env'
 import { FunctionalRenderContext } from 'core/vdom/create-functional-component'
 
+// 给Vue添加静态方法
 initGlobalAPI(Vue)
 
+// 服务器渲染相关
 Object.defineProperty(Vue.prototype, '$isServer', {
   get: isServerRendering
 })
-
+// 服务器渲染相关
 Object.defineProperty(Vue.prototype, '$ssrContext', {
   get () {
     /* istanbul ignore next */
     return this.$vnode && this.$vnode.ssrContext
   }
 })
-
+// 服务器渲染相关
 // expose FunctionalRenderContext for ssr runtime helper installation
 Object.defineProperty(Vue, 'FunctionalRenderContext', {
   value: FunctionalRenderContext
 })
-
+// 添加版本
 Vue.version = '__VERSION__'
 
 export default Vue
